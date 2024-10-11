@@ -1,0 +1,72 @@
+#include <iostream>
+using std::cout, std::endl;
+#include <vector>
+using std::vector;
+
+class Node
+{
+    public:
+        int val;
+        Node *prev, *next;
+        Node (int v, Node *prev, Node *next) : val(v)
+        {
+            this->prev = prev;
+            this->next = next;
+        }
+};
+
+class DLL
+{
+    private:
+        Node *head, *tail;
+    public:
+        DLL() {head = tail = nullptr;}
+        ~DLL()
+        {
+            Node *i = head;
+            while (i)
+            {
+                Node *j = i;
+                i = i->next;
+                delete j;
+            }
+            
+            head = tail = nullptr;
+        }
+        void addHead(int val)
+        {
+            Node *i = new Node(val, nullptr, head);
+            if (head != nullptr)
+                head->prev = i;
+            head = i;
+            if (tail == nullptr)
+                tail = i;
+        }
+        void addTail(int val)
+        {
+            Node *i = new Node(val, tail, nullptr);
+            if (tail != nullptr)
+                tail->next = i;
+            tail = i;
+            if (head == nullptr)
+                head = i;
+        }
+        vector<int> toArray() const
+        {
+            vector<int>arr;
+            for (Node *i=head; i!=nullptr; i=i->next)
+                arr.push_back(i->val);
+            return arr;
+        }
+};
+
+int main()
+{
+    DLL L;
+    for (int i=1; i<=5; i+=1)
+        L.addHead(i);
+    vector<int> a = L.toArray();
+    for (int x : a)
+        cout<<x<<' ';
+    return 0;
+}
